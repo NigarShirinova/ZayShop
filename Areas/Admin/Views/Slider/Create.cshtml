@@ -1,0 +1,20 @@
+﻿﻿@using ZayShop.Areas.Admin.Models.Slider
+@model SliderCreateVM
+
+<form method="post" asp-action="create" asp-controller="slider">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Enter name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+        <label asp-for="Description1"></label>
+        <input asp-for="Description1" class="form-control" placeholder="Enter description1" />
+        <span asp-validation-for="Description1" class="text-danger"></span>
+        <label asp-for="Description2"></label>
+        <input asp-for="Description2" class="form-control" placeholder="Enter description2" />
+        <span asp-validation-for="Description2" class="text-danger"></span>
+        <label asp-for="PhotoPath"></label>
+        <input asp-for="PhotoPath" class="form-control" placeholder="Enter photopath" />
+        <span asp-validation-for="PhotoPath" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

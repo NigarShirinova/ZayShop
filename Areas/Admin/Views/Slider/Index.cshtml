@@ -1,0 +1,39 @@
+﻿@using ZayShop.Areas.Admin.Models.Slider
+@model SliderIndexVM
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Sliders</h1>
+    <a class="btn btn-primary" asp-action="create" asp-controller="slider">Create</a>
+</div>
+
+<table class="table table-light">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description1</th>
+            <th scope="col">Description2</th>
+            <th scope="col">Created </th>
+            <th scope="col">Modified </th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var slider in Model.Sliders)
+        {
+            <tr>
+                <td>@slider.Name</td>
+                <td>@slider.Description1</td>
+                <td>@slider.Description2</td>
+                <td>@slider.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@slider.ModifiedAt?.ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="text-center d-flex justify-content-center">
+                    <a class="btn btn-secondary mx-2" asp-action="update" asp-controller="slider" asp-route-id="@slider.Id">Update</a>
+                    <form method="post" asp-action="delete" asp-controller="slider" asp-route-id="@slider.Id">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
