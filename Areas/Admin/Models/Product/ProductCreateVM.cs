@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ZayShop.Entities
+namespace ZayShop.Areas.Admin.Models.Work
 {
-    public class Product : BaseEntity
+    public class ProductCreateVM
     {
         public string Name { get; set; }
         public string Size { get; set; }

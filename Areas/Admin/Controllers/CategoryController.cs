@@ -1,27 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ZayShop.Areas.Admin.Models.Category;
 using ZayShop.Areas.Admin.Models.Slider;
 using ZayShop.Data;
 
 namespace ZayShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class SliderController : Controller
+    public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
 
-        public SliderController(AppDbContext context)
+        public CategoryController(AppDbContext context)
         {
             _context = context;
         }
-
         #region List
 
         [HttpGet]
         public IActionResult Index()
         {
-            var model = new SliderIndexVM
+            var model = new CategoryIndexVM
             {
-                Sliders = _context.Sliders.ToList()
+                Categories = _context.Categories.ToList()
             };
 
             return View(model);
@@ -38,22 +39,20 @@ namespace ZayShop.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(SliderCreateVM model)
+        public IActionResult Create(CategoryCreateVM model)
         {
             if (!ModelState.IsValid) return View();
 
-            var slider = _context.Sliders.FirstOrDefault(wc => wc.Name.ToLower() == model.Name.ToLower());
-           
+            var category = _context.Categories.FirstOrDefault(c => c.Name.ToLower() == model.Name.ToLower());
 
-            slider = new Entities.Slider
+
+            category = new Entities.Category
             {
-                Name = model.Name,
-                Description1 = model.Description1,
-                Description2 = model.Description2,
-                PhotoPath = model.PhotoPath
+                Name = model.Name
+                
             };
 
-            _context.Sliders.Add(slider);
+            _context.Categories.Add(category);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
@@ -67,53 +66,52 @@ namespace ZayShop.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var slider = _context.Sliders.Find(id);
-            
+            var category = _context.Categories.Find(id);
 
-            var model = new SliderUpdateVM
+
+            var model = new CategoryUpdateVM
             {
-                Name = slider.Name,
-                Description1 = slider.Description1,
-                Description2 = slider.Description2,
-                PhotoPath = slider.PhotoPath
+                Name = category.Name
+               
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Update(int id, SliderUpdateVM model)
+        public IActionResult Update(int id, CategoryUpdateVM model)
         {
             if (!ModelState.IsValid) return View();
 
-            var slider = _context.Sliders.Find(id);
-            
+            var category = _context.Categories.Find(id);
 
-            slider.ModifiedAt = DateTime.Now;
 
-            slider.Name = model.Name;
+            category.ModifiedAt = DateTime.Now;
 
-            _context.Sliders.Update(slider);
+            category.Name = model.Name;
+
+            _context.Categories.Update(category);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
         #endregion
+
         #region Delete
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var slider = _context.Sliders.Find(id);
-            if (slider is null) return NotFound();
+            var category = _context.Categories.Find(id);
+            if (category is null) return NotFound();
 
-            _context.Sliders.Remove(slider);
+            _context.Categories.Remove(category);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
- 
+
         #endregion
     }
 }
