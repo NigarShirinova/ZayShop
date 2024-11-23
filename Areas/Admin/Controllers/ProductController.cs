@@ -5,6 +5,7 @@ using ZayShop.Areas.Admin.Models.Product;
 using ZayShop.Areas.Admin.Models.Work;
 using ZayShop.Data;
 using ZayShop.Entities;
+using ZayShop.Utilities.File;
 
 namespace ZayShop.Areas.Admin.Controllers
 {
@@ -12,46 +13,86 @@ namespace ZayShop.Areas.Admin.Controllers
 	public class ProductController : Controller
 	{
 		private readonly AppDbContext _context;
+		private readonly IFileService _fileService;
 
-		public ProductController(AppDbContext context)
+		private List<SelectListItem> GetCategories()
 		{
-			_context = context;
+			return _context.Categories.Select(c => new SelectListItem
+			{
+				Text = c.Name,
+				Value = c.Id.ToString()
+			}).ToList();
+
 		}
 
+		public ProductController(AppDbContext context, IFileService fileService)
+		{
+			_context = context;
+			_fileService = fileService;
+		}
 		[HttpGet]
 		public IActionResult Index()
 		{
-			return View();
+			var model = new ProductIndexVM
+			{
+				Products = _context.Products.ToList()
+			};
+
+			return View(model);
 		}
+
 
 		[HttpGet]
 		public IActionResult Create()
 		{
 			var model = new ProductCreateVM
 			{
-				Categories = _context.Categories.Select(c => new SelectListItem
-				{
-					Text = c.Name,
-					Value = c.Id.ToString()
-				}).ToList()
-			};
+				Categories = GetCategories(),
+				
+
+		};
 
 			return View(model);
 		}
 
 		[HttpPost]
 		public IActionResult Create(ProductCreateVM model)
+
+
 		{
-			if (!ModelState.IsValid)
+			
+			
+			if (model.CategoryId == null)
 			{
 				model.Categories = _context.Categories.Select(c => new SelectListItem
 				{
 					Text = c.Name,
 					Value = c.Id.ToString()
 				}).ToList();
+				
+
+                if (model.CategoryId == null)
+				{
+					ModelState.AddModelError("CategoryId", "Please select a category.");
+				}
+
 				return View(model);
 			}
 
+
+			if(!_fileService.IsImage(model.Photo.ContentType))
+
+			{
+				ModelState.AddModelError("Photo", "This is not an image");
+				return View(model);
+			}
+			if (!_fileService.IsAvailableSize(model.Photo.Length))
+			{
+				ModelState.AddModelError("Photo", "Image's volume is higher that 100kb");
+				return View(model);
+			}
+
+			var photoName = _fileService.Upload(model.Photo, "assets/img");
 			var existingProduct = _context.Products.FirstOrDefault(w => w.Name.ToLower() == model.Name.ToLower());
 			if (existingProduct != null)
 			{
@@ -68,9 +109,9 @@ namespace ZayShop.Areas.Admin.Controllers
 			{
 				CategoryId = model.CategoryId,
 				Name = model.Name,
-				PhotoPath = model.PhotoPath,
 				Price = model.Price,
-				Size = model.Size
+				Size = model.Size,
+				PhotoPath=""
 			};
 
 			_context.Products.Add(product);
@@ -91,7 +132,6 @@ namespace ZayShop.Areas.Admin.Controllers
 			var model = new ProductUpdateVM
 			{
 				Name = product.Name,
-				PhotoPath = product.PhotoPath,
 				Price = product.Price,
 				Size = product.Size,
 				CategoryId = product.CategoryId,
@@ -113,7 +153,6 @@ namespace ZayShop.Areas.Admin.Controllers
 			var category = _context.Categories.Find(product.CategoryId);
 
 			product.Name = model.Name;
-			product.PhotoPath = model.PhotoPath;
 			product.Price = model.Price;
 			product.Size = model.Size;
 			product.CategoryId = category.Id;
