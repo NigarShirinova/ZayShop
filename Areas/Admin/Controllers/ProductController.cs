@@ -22,7 +22,6 @@ namespace ZayShop.Areas.Admin.Controllers
 				Text = c.Name,
 				Value = c.Id.ToString()
 			}).ToList();
-
 		}
 
 		public ProductController(AppDbContext context, IFileService fileService)
@@ -30,6 +29,7 @@ namespace ZayShop.Areas.Admin.Controllers
 			_context = context;
 			_fileService = fileService;
 		}
+
 		[HttpGet]
 		public IActionResult Index()
 		{
@@ -41,67 +41,48 @@ namespace ZayShop.Areas.Admin.Controllers
 			return View(model);
 		}
 
-
 		[HttpGet]
 		public IActionResult Create()
 		{
 			var model = new ProductCreateVM
 			{
 				Categories = GetCategories(),
-				
-
-		};
+			};
 
 			return View(model);
 		}
 
 		[HttpPost]
 		public IActionResult Create(ProductCreateVM model)
-
-
 		{
-			
-			
-			if (model.CategoryId == null)
+			if (!ModelState.IsValid || model.CategoryId == null)
 			{
-				model.Categories = _context.Categories.Select(c => new SelectListItem
-				{
-					Text = c.Name,
-					Value = c.Id.ToString()
-				}).ToList();
-				
-
-                if (model.CategoryId == null)
+				model.Categories = GetCategories();
+				if (model.CategoryId == null)
 				{
 					ModelState.AddModelError("CategoryId", "Please select a category.");
 				}
-
 				return View(model);
 			}
 
-
-			if(!_fileService.IsImage(model.Photo.ContentType))
-
+			if (!_fileService.IsImage(model.Photo.ContentType))
 			{
-				ModelState.AddModelError("Photo", "This is not an image");
+				ModelState.AddModelError("Photo", "This is not an image.");
 				return View(model);
 			}
+
 			if (!_fileService.IsAvailableSize(model.Photo.Length))
 			{
-				ModelState.AddModelError("Photo", "Image's volume is higher that 100kb");
+				ModelState.AddModelError("Photo", "Image's volume is higher than 100kb.");
 				return View(model);
 			}
 
 			var photoName = _fileService.Upload(model.Photo, "assets/img");
-			var existingProduct = _context.Products.FirstOrDefault(w => w.Name.ToLower() == model.Name.ToLower());
-			if (existingProduct != null)
+
+			if (_context.Products.Any(w => w.Name.ToLower() == model.Name.ToLower()))
 			{
 				ModelState.AddModelError("Name", "A product with the same name already exists.");
-				model.Categories = _context.Categories.Select(c => new SelectListItem
-				{
-					Text = c.Name,
-					Value = c.Id.ToString()
-				}).ToList();
+				model.Categories = GetCategories();
 				return View(model);
 			}
 
@@ -111,7 +92,8 @@ namespace ZayShop.Areas.Admin.Controllers
 				Name = model.Name,
 				Price = model.Price,
 				Size = model.Size,
-				PhotoPath=""
+				PhotoPath = photoName,
+				CreatedAt = DateTime.Now
 			};
 
 			_context.Products.Add(product);
@@ -119,7 +101,6 @@ namespace ZayShop.Areas.Admin.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		#region Update
 		[HttpGet]
 		public IActionResult Update(int id)
 		{
@@ -135,51 +116,73 @@ namespace ZayShop.Areas.Admin.Controllers
 				Price = product.Price,
 				Size = product.Size,
 				CategoryId = product.CategoryId,
-				Categories = _context.Categories.Select(c => new SelectListItem
-				{
-					Text = c.Name,
-					Value = c.Id.ToString()
-				}).ToList()
+				Categories = GetCategories()
 			};
 
 			return View(model);
 		}
 
-
 		[HttpPost]
-		public IActionResult Update(int id, ProductUpdateVM model) 
+		public IActionResult Update(int id, ProductUpdateVM model)
 		{
 			var product = _context.Products.Find(id);
-			var category = _context.Categories.Find(product.CategoryId);
+			if (product == null)
+			{
+				return NotFound();
+			}
+
+			if (!ModelState.IsValid)
+			{
+				model.Categories = GetCategories();
+				return View(model);
+			}
+
+			if (model.Photo != null)
+			{
+				if (!_fileService.IsImage(model.Photo.ContentType))
+				{
+					ModelState.AddModelError("Photo", "This is not an image.");
+					model.Categories = GetCategories();
+					return View(model);
+				}
+
+				if (!_fileService.IsAvailableSize(model.Photo.Length))
+				{
+					ModelState.AddModelError("Photo", "Image's volume is higher than 100kb.");
+					model.Categories = GetCategories();
+					return View(model);
+				}
+
+				_fileService.Delete(product.PhotoPath, "assets/img");
+				product.PhotoPath = _fileService.Upload(model.Photo, "assets/img");
+			}
 
 			product.Name = model.Name;
 			product.Price = model.Price;
 			product.Size = model.Size;
-			product.CategoryId = category.Id;
+			product.CategoryId = model.CategoryId;
 			product.ModifiedAt = DateTime.Now;
 
 			_context.Products.Update(product);
 			_context.SaveChanges();
 
-			return RedirectToAction("Index");
-		
+			return RedirectToAction(nameof(Index));
 		}
-		#endregion
-
-		#region Delete
 
 		[HttpPost]
 		public IActionResult Delete(int id)
 		{
 			var product = _context.Products.Find(id);
-			if (product is null) return NotFound();
+			if (product == null)
+			{
+				return NotFound();
+			}
 
+			_fileService.Delete(product.PhotoPath, "assets/img");
 			_context.Products.Remove(product);
 			_context.SaveChanges();
 
 			return RedirectToAction(nameof(Index));
 		}
-
-		#endregion
 	}
 }

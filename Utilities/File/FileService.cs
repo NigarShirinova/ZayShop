@@ -41,8 +41,5 @@ namespace ZayShop.Utilities.File
 			if(length/1024 > maxSize) return false;
 			return true;
 		}
-
-		
-
 	}
 }
