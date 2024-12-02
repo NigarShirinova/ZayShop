@@ -25,5 +25,23 @@ namespace ZayShop.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult FilterProducts(int categoryId)
+        {
+            var products = _context.Products
+                .Where(p => p.CategoryId == categoryId)
+                .Select(p => new
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    PhotoPath = p.PhotoPath,
+                    Size = p.Size
+                })
+                .ToList();
+
+            return Json(products);
+        }
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zTe5LctQmeLwW7aromyO4ohRLrWlLXXKtDZ8BmNew7A=",
+  "Hash": "0bUB/8VlpGPqVZLGuW8ZY8Dx/c/w2qJcAUa2iAamAoc=",
   "Source": "ZayShop",
   "BasePath": "_content/ZayShop",
   "Mode": "Default",
@@ -34994,6 +34994,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\assets\\css\\templatemo.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\assets\\img\\76e3dd50-c03b-4630-ba94-63742a3e52a8 cat.png",
+      "SourceId": "ZayShop",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\",
+      "BasePath": "_content/ZayShop",
+      "RelativePath": "assets/img/76e3dd50-c03b-4630-ba94-63742a3e52a8 cat.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\img\\76e3dd50-c03b-4630-ba94-63742a3e52a8 cat.png"
     },
     {
       "Identity": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\assets\\img\\7d36f181-7f38-4b5e-8d79-17846beb5e36 cat.png",
