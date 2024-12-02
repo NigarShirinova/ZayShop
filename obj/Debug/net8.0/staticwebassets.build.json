@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0bUB/8VlpGPqVZLGuW8ZY8Dx/c/w2qJcAUa2iAamAoc=",
+  "Hash": "6rEtnOy+Kutcmeyigwj4zFFKVSkmkzEbhrIc8Esu3rw=",
   "Source": "ZayShop",
   "BasePath": "_content/ZayShop",
   "Mode": "Default",
@@ -35830,6 +35830,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\assets\\js\\jquery-migrate-1.2.1.min.js"
+    },
+    {
+      "Identity": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\assets\\js\\shop-filter.js",
+      "SourceId": "ZayShop",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\",
+      "BasePath": "_content/ZayShop",
+      "RelativePath": "assets/js/shop-filter.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\js\\shop-filter.js"
     },
     {
       "Identity": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\assets\\js\\slick.min.js",

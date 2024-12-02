@@ -7541,6 +7541,10 @@
       "PackagePath": "staticwebassets\\assets\\js\\jquery-migrate-1.2.1.min.js"
     },
     {
+      "Id": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\assets\\js\\shop-filter.js",
+      "PackagePath": "staticwebassets\\assets\\js\\shop-filter.js"
+    },
+    {
       "Id": "C:\\Users\\AzComp\\Desktop\\MVC\\ZayShop\\ZayShop\\wwwroot\\assets\\js\\slick.min.js",
       "PackagePath": "staticwebassets\\assets\\js\\slick.min.js"
     },

@@ -20,6 +20,8 @@ namespace ZayShop.Controllers
             var model = new ShopIndexVM
             {
 				Products = _context.Products.Include(c => c.Category).ToList(),
+                Categories = _context.Categories.ToList(),
+                
 			};
 
 
